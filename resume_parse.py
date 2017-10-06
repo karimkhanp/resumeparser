@@ -42,6 +42,11 @@ class ResumeParser(object):
         mobile = re.findall(r'(?:\+?\d{2}[ -]?)?\d{10}', text)
         return mobile
     
+    def getEmail(self, text):
+        res = re.search("([^@|\s]+@[^@]+\.[^@|\s]+)",text,re.I)
+        return res.group(1)
+    
+    
     
     def fileReader(self):
         file_name = raw_input("\nEnter file name: ")
@@ -55,6 +60,9 @@ class ResumeParser(object):
         print "\n\nMobile number:"
         mb_number = self.getPhone(text.lower())
         print mb_number
+        print "\n\nEMail ID:"
+        email = self.getEmail(text.lower())
+        print email
 
 if __name__ == '__main__':
     while True:
