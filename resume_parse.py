@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import textract, pdb
+import textract, pdb, re
 from nltk.tag import StanfordNERTagger
 from nltk.tokenize import word_tokenize
 
@@ -35,12 +35,16 @@ class ResumeParser(object):
                     if word.lower() not in text_lines[i]:
                         name = text.split('\n')[i]
                         # print name
-                        return name
-            
+                        return name         
         return name
     
+    def getPhone(self, text):
+        mobile = re.findall(r'(?:\+?\d{2}[ -]?)?\d{10}', text)
+        return mobile
+    
+    
     def fileReader(self):
-        file_name = raw_input("Enter file name: ")
+        file_name = raw_input("\nEnter file name: ")
         text = textract.process(file_name)
         print "\nOrganizations and name using Stanford NER"
         st_name = self.StanfordNER(text.lower())
@@ -48,6 +52,9 @@ class ResumeParser(object):
         print "\n\nName using rule based approach"
         rl_name = self.name_extractor(text.lower())
         print rl_name
+        print "\n\nMobile number:"
+        mb_number = self.getPhone(text.lower())
+        print mb_number
 
 if __name__ == '__main__':
     while True:
