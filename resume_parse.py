@@ -11,7 +11,9 @@ class ResumeParser(object):
         This fucntion contains all Global parameters
     '''
     def __init__(self):
-        pass
+        read_skill = open('skills_list', 'r').read()
+        self.skill_list = read_skill.split('#')
+        
     
     def StanfordNER(self, text):
         st = StanfordNERTagger('/home/ubuntu/Documents/nltk_data/stanford-ner-2014-06-16/classifiers/english.all.3class.distsim.crf.ser.gz','/home/ubuntu/Documents/nltk_data/stanford-ner-2014-06-16/stanford-ner.jar',  encoding='utf-8')
@@ -38,6 +40,17 @@ class ResumeParser(object):
                         return name         
         return name
     
+    def get_skill(self, text):
+        # read_skill = 
+        skill_present = []
+        for skill in self.skill_list:
+            if  skill.lower() in text:
+                skill_present.append(skill)
+        
+        return set(skill_present)
+        
+    
+    
     def getPhone(self, text):
         mobile = re.findall(r'(?:\+?\d{2}[ -]?)?\d{10}', text)
         return mobile
@@ -63,6 +76,8 @@ class ResumeParser(object):
         print "\n\nEMail ID:"
         email = self.getEmail(text.lower())
         print email
+        candidate_skills = self.get_skill(text.lower())
+        print candidate_skills
 
 if __name__ == '__main__':
     while True:
