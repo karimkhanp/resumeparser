@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import textract, pdb, re
+import textract, pdb, re, csv
 from nltk.tag import StanfordNERTagger
 from nltk.tokenize import word_tokenize
 
@@ -11,7 +11,7 @@ class ResumeParser(object):
         This fucntion contains all Global parameters
     '''
     def __init__(self):
-        read_skill = open('skills_list', 'r').read()
+        read_skill = open('skills_list_source', 'r').read()
         self.skill_list = read_skill.split('#')
         
     
@@ -20,6 +20,7 @@ class ResumeParser(object):
         tokenized_text = word_tokenize(text)
         res = st.tag(tokenized_text)
         # print res
+        # pdb.set_trace()
         for val in res:
             if val[1].lower() == 'person':
                 print "Name : ", val[0]            
@@ -27,57 +28,79 @@ class ResumeParser(object):
                 print "organization : ", val[0]        
     
     def name_extractor(self, text):
-        skip_words = ['CURRICULUM', 'VITAE', 'resume']
+        skip_words = ['curriculum', 'vitae', 'resume']
         text_lines = text.split('\n')
         name = ''
         # pdb.set_trace()
-        for  i in range(0,4):
-            if text_lines[i]:
-                for word in skip_words:
-                    if word.lower() not in text_lines[i]:
-                        name = text.split('\n')[i]
-                        # print name
-                        return name         
-        return name
+        
+        for line in text_lines[:4]:
+            if line:
+                line_words = set(line.lower().split(' '))
+                if not line_words.intersection(skip_words):
+                    return line
+        return ''
+        # for  i in range(0,4):
+        #     if text_lines[i]:
+        #         for word in skip_words:
+        #             if word.lower() in text_lines[i]:
+        #                 break
+        #             else:
+        #                 name = text.split('\n')[i]
+        #                 # print name
+        #                 return name         
+        # return name
     
     def get_skill(self, text):
         # read_skill = 
         skill_present = []
         for skill in self.skill_list:
-            if  skill.lower() in text:
+            if  skill.lower()+ ' ' in text or skill.lower()+ ',' in text:
                 skill_present.append(skill)
         
-        return set(skill_present)
-        
-    
+        return list(set(skill_present))   
     
     def getPhone(self, text):
         mobile = re.findall(r'(?:\+?\d{2}[ -]?)?\d{10}', text)
         return mobile
     
     def getEmail(self, text):
-        res = re.search("([^@|\s]+@[^@]+\.[^@|\s]+)",text,re.I)
-        return res.group(1)
+        # pdb.set_trace()
+        res = re.search(r'[\w\.-]+@[\w\.-]+',text,re.I) 
+        return res.group(0)
     
     
     
     def fileReader(self):
+        res = {}
         file_name = raw_input("\nEnter file name: ")
+        res['file_name'] = file_name
         text = textract.process(file_name)
-        print "\nOrganizations and name using Stanford NER"
-        st_name = self.StanfordNER(text.lower())
-        print st_name
-        print "\n\nName using rule based approach"
-        rl_name = self.name_extractor(text.lower())
-        print rl_name
-        print "\n\nMobile number:"
+        # print "\nOrganizations and name using Stanford NER"
+        SF_name = self.StanfordNER(text.lower())
+        res['SF_name'] = SF_name
+        # print SF_name
+        # print "\n\nName using rule based approach"
+        RB_name = self.name_extractor(text.lower())
+        res['RB_name'] = RB_name
+        # print RB_name
+        # print "\n\nMobile number:"
         mb_number = self.getPhone(text.lower())
-        print mb_number
-        print "\n\nEMail ID:"
+        res['mb_number'] = mb_number
+        # print mb_number
+        # print "\n\nEMail ID:"
         email = self.getEmail(text.lower())
-        print email
+        res['email'] = email
+        # print email
         candidate_skills = self.get_skill(text.lower())
-        print candidate_skills
+        res['candidate_skills'] = candidate_skills
+        # print candidate_skills
+        print res.keys()
+        print res
+        with open('dict.csv', 'wb') as csv_file:
+            writer = csv.writer(csv_file)
+            for key, value in res.items():
+                writer.writerow([key, value])
+        
 
 if __name__ == '__main__':
     while True:
