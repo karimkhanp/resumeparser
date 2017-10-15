@@ -96,10 +96,11 @@ class ResumeParser(object):
         # print candidate_skills
         print res.keys()
         print res
-        with open('dict.csv', 'wb') as csv_file:
-            writer = csv.writer(csv_file)
-            for key, value in res.items():
-                writer.writerow([key, value])
+        with open('result.csv', 'a') as csvfile:
+            fieldnames = res.keys()
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+            writer.writeheader()
+            writer.writerow(res)
         
 
 if __name__ == '__main__':
