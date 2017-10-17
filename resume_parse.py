@@ -65,8 +65,8 @@ class ResumeParser(object):
     
     def getEmail(self, text):
         # pdb.set_trace()
-        res = re.search(r'[\w\.-]+@[\w\.-]+',text,re.I) 
-        return res.group(0)
+        res = re.findall(r'[\w\.-]+@[\w\.-]+',text,re.I) 
+        return list(set(res))
     
     
     
@@ -76,9 +76,9 @@ class ResumeParser(object):
         res['file_name'] = file_name
         text = textract.process(file_name)
         # print "\nOrganizations and name using Stanford NER"
-        SF_name = self.StanfordNER(text.lower())
-        res['SF_name'] = SF_name
-        # print SF_name
+        # SF_name = self.StanfordNER(text.lower())
+        # res['SF_name'] = SF_name
+        # # print SF_name
         # print "\n\nName using rule based approach"
         RB_name = self.name_extractor(text.lower())
         res['RB_name'] = RB_name
