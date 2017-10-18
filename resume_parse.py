@@ -13,7 +13,8 @@ class ResumeParser(object):
     def __init__(self):
         read_skill = open('skills_list_source', 'r').read()
         self.skill_list = read_skill.split('#')
-        
+        read_education = open('educations', 'r').read()
+        self.education_list = read_education.split('#')     
     
     def StanfordNER(self, text):
         st = StanfordNERTagger('/home/ubuntu/Documents/nltk_data/stanford-ner-2014-06-16/classifiers/english.all.3class.distsim.crf.ser.gz','/home/ubuntu/Documents/nltk_data/stanford-ner-2014-06-16/stanford-ner.jar',  encoding='utf-8')
@@ -55,9 +56,16 @@ class ResumeParser(object):
         skill_present = []
         for skill in self.skill_list:
             if  skill.lower()+ ' ' in text or skill.lower()+ ',' in text:
-                skill_present.append(skill)
-        
+                skill_present.append(skill)        
         return list(set(skill_present))   
+
+    def get_education(self, text):
+        # read_skill = 
+        degree_present = []
+        for degree in self.education_list:
+            if  degree.lower()+ ' ' in text or degree.lower()+ ',' in text:
+               degree_present.append(degree)        
+        return list(set(degree_present))   
     
     def getPhone(self, text):
         mobile = re.findall(r'(?:\+?\d{2}[ -]?)?\d{10}', text)
@@ -77,24 +85,16 @@ class ResumeParser(object):
         text = textract.process(file_name)
         # print "\nOrganizations and name using Stanford NER"
         # SF_name = self.StanfordNER(text.lower())
-        # res['SF_name'] = SF_name
-        # # print SF_name
-        # print "\n\nName using rule based approach"
         RB_name = self.name_extractor(text.lower())
         res['RB_name'] = RB_name
-        # print RB_name
-        # print "\n\nMobile number:"
         mb_number = self.getPhone(text.lower())
         res['mb_number'] = mb_number
-        # print mb_number
-        # print "\n\nEMail ID:"
         email = self.getEmail(text.lower())
         res['email'] = email
-        # print email
         candidate_skills = self.get_skill(text.lower())
         res['candidate_skills'] = candidate_skills
-        # print candidate_skills
-        print res.keys()
+        candidate_education = self.get_education(text.lower())
+        res['candidate_education'] = candidate_education
         print res
         with open('result.csv', 'a') as csvfile:
             fieldnames = res.keys()
