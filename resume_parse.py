@@ -15,6 +15,8 @@ class ResumeParser(object):
         self.skill_list = read_skill.split('#')
         read_education = open('educations', 'r').read()
         self.education_list = read_education.split('#')     
+        read_company = open('company_list', 'r').read()
+        self.company_list = read_company.split(',')     
     
     def StanfordNER(self, text):
         st = StanfordNERTagger('/home/ubuntu/Documents/nltk_data/stanford-ner-2014-06-16/classifiers/english.all.3class.distsim.crf.ser.gz','/home/ubuntu/Documents/nltk_data/stanford-ner-2014-06-16/stanford-ner.jar',  encoding='utf-8')
@@ -40,16 +42,6 @@ class ResumeParser(object):
                 if not line_words.intersection(skip_words):
                     return line
         return ''
-        # for  i in range(0,4):
-        #     if text_lines[i]:
-        #         for word in skip_words:
-        #             if word.lower() in text_lines[i]:
-        #                 break
-        #             else:
-        #                 name = text.split('\n')[i]
-        #                 # print name
-        #                 return name         
-        # return name
     
     def get_skill(self, text):
         # read_skill = 
@@ -63,10 +55,18 @@ class ResumeParser(object):
         # read_skill = 
         degree_present = []
         for degree in self.education_list:
-            if  degree.lower()+ ' ' in text or degree.lower()+ ',' in text:
+            if  degree.lower()+ ' ' in text or degree.lower()+ ',' in text or degree in text:
                degree_present.append(degree)        
         return list(set(degree_present))   
-    
+
+    def get_company(self, text):
+        # read_skill = 
+        company_present = []
+        for comp in self.company_list:
+            if  comp.lower()+ ' ' in text or comp.lower()+ ',' in text:
+               company_present.append(comp)        
+        return list(set(company_present))  
+
     def getPhone(self, text):
         mobile = re.findall(r'(?:\+?\d{2}[ -]?)?\d{10}', text)
         return mobile
@@ -76,7 +76,9 @@ class ResumeParser(object):
         res = re.findall(r'[\w\.-]+@[\w\.-]+',text,re.I) 
         return list(set(res))
     
-    
+    def getUrls(self, text):
+        urls = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', text)
+        return urls 
     
     def fileReader(self):
         res = {}
@@ -93,8 +95,12 @@ class ResumeParser(object):
         res['email'] = email
         candidate_skills = self.get_skill(text.lower())
         res['candidate_skills'] = candidate_skills
-        candidate_education = self.get_education(text.lower())
+        candidate_education = self.get_education(text)
         res['candidate_education'] = candidate_education
+        candidate_company = self.get_company(text.lower())
+        res['candidate_company'] = candidate_company
+        urls_list = self.getUrls(text.lower())
+        res['urls_list'] = urls_list
         print res
         with open('result.csv', 'a') as csvfile:
             fieldnames = res.keys()
