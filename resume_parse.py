@@ -16,7 +16,11 @@ class ResumeParser(object):
         read_education = open('educations', 'r').read()
         self.education_list = read_education.split('#')     
         read_company = open('company_list', 'r').read()
-        self.company_list = read_company.split(',')     
+        self.company_list = read_company.split(',')
+        read_designation = open('designation.txt', 'r').read()
+        self.designation_list = read_designation.split('#')
+        read_certificate = open('certification.txt', 'r').read()
+        self.certificate_list = read_certificate.split('#')
     
     def StanfordNER(self, text):
         st = StanfordNERTagger('/home/ubuntu/Documents/nltk_data/stanford-ner-2014-06-16/classifiers/english.all.3class.distsim.crf.ser.gz','/home/ubuntu/Documents/nltk_data/stanford-ner-2014-06-16/stanford-ner.jar',  encoding='utf-8')
@@ -63,10 +67,26 @@ class ResumeParser(object):
         # read_skill = 
         company_present = []
         for comp in self.company_list:
-            if  comp.lower()+ ' ' in text or comp.lower()+ ',' in text:
+            if  comp+ ' ' in text or comp+ ',' in text:
                company_present.append(comp)        
-        return list(set(company_present))  
+        return list(set(company_present))
+    
+    def get_certificate(self, text):
+        # read_skill = 
+        certificate_present = []
+        for certificate in self.certificate_list:
+            if  certificate+ ' ' in text or certificate+ ',' in text:
+               certificate_present.append(certificate)        
+        return list(set(certificate_present))  
 
+    def get_designation(self, text):
+        # read_skill = 
+        designation_present = []
+        for designation in self.designation_list:
+            if  designation.lower()+ ' ' in text or designation.lower()+ ',' in text:
+               designation_present.append(designation)        
+        return list(set(designation_present))
+    
     def getPhone(self, text):
         mobile = re.findall(r'(?:\+?\d{2}[ -]?)?\d{10}', text)
         return mobile
@@ -97,10 +117,14 @@ class ResumeParser(object):
         res['candidate_skills'] = candidate_skills
         candidate_education = self.get_education(text)
         res['candidate_education'] = candidate_education
-        candidate_company = self.get_company(text.lower())
+        candidate_company = self.get_company(text)
         res['candidate_company'] = candidate_company
         urls_list = self.getUrls(text.lower())
         res['urls_list'] = urls_list
+        candidate_designation = self.get_designation(text)
+        res['candidate_designation'] = candidate_designation
+        certificate_list = self.get_certificate(text.lower())
+        res['certificate_list'] = certificate_list
         print res
         with open('result.csv', 'a') as csvfile:
             fieldnames = res.keys()
