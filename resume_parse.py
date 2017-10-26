@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import textract, pdb, re, csv
+import textract, pdb, re, csv, os
 from nltk.tag import StanfordNERTagger
 from nltk.tokenize import word_tokenize
 
@@ -102,35 +102,38 @@ class ResumeParser(object):
     
     def fileReader(self):
         res = {}
-        file_name = raw_input("\nEnter file name: ")
-        res['file_name'] = file_name
-        text = textract.process(file_name)
-        # print "\nOrganizations and name using Stanford NER"
-        # SF_name = self.StanfordNER(text.lower())
-        RB_name = self.name_extractor(text.lower())
-        res['RB_name'] = RB_name
-        mb_number = self.getPhone(text.lower())
-        res['mb_number'] = mb_number
-        email = self.getEmail(text.lower())
-        res['email'] = email
-        candidate_skills = self.get_skill(text.lower())
-        res['candidate_skills'] = candidate_skills
-        candidate_education = self.get_education(text)
-        res['candidate_education'] = candidate_education
-        candidate_company = self.get_company(text)
-        res['candidate_company'] = candidate_company
-        urls_list = self.getUrls(text.lower())
-        res['urls_list'] = urls_list
-        candidate_designation = self.get_designation(text)
-        res['candidate_designation'] = candidate_designation
-        certificate_list = self.get_certificate(text.lower())
-        res['certificate_list'] = certificate_list
-        print res
-        with open('result.csv', 'a') as csvfile:
-            fieldnames = res.keys()
-            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-            writer.writeheader()
-            writer.writerow(res)
+        #one can give path of any  target direcory here
+        cwd = os.getcwd()
+        for filename in os.listdir(cwd):
+            if filename.endswith(".docx") or filename.endswith(".pdf"):
+                res['file_name'] = filename
+                text = textract.process(filename)
+                # print "\nOrganizations and name using Stanford NER"
+                # SF_name = self.StanfordNER(text.lower())
+                RB_name = self.name_extractor(text.lower())
+                res['RB_name'] = RB_name
+                mb_number = self.getPhone(text.lower())
+                res['mb_number'] = mb_number
+                email = self.getEmail(text.lower())
+                res['email'] = email
+                candidate_skills = self.get_skill(text.lower())
+                res['candidate_skills'] = candidate_skills
+                candidate_education = self.get_education(text)
+                res['candidate_education'] = candidate_education
+                candidate_company = self.get_company(text)
+                res['candidate_company'] = candidate_company
+                urls_list = self.getUrls(text.lower())
+                res['urls_list'] = urls_list
+                candidate_designation = self.get_designation(text)
+                res['candidate_designation'] = candidate_designation
+                certificate_list = self.get_certificate(text.lower())
+                res['certificate_list'] = certificate_list
+                print res
+                with open('result.csv', 'a') as csvfile:
+                    fieldnames = res.keys()
+                    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+                    # writer.writeheader()
+                    writer.writerow(res)
         
 
 if __name__ == '__main__':
