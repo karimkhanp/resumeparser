@@ -67,7 +67,7 @@ class ResumeParser(object):
         # read_skill = 
         company_present = []
         for comp in self.company_list:
-            if  comp+ ' ' in text or comp+ ',' in text:
+            if  comp.lower()+ ' ' in text or comp.lower()+ ',' in text:
                company_present.append(comp)        
         return list(set(company_present))
     
@@ -104,8 +104,11 @@ class ResumeParser(object):
         res = {}
         #one can give path of any  target direcory here
         cwd = os.getcwd()
+        count = 0
         for filename in os.listdir(cwd):
             if filename.endswith(".docx") or filename.endswith(".pdf"):
+                count += 1
+                print count
                 res['file_name'] = filename
                 text = textract.process(filename)
                 # print "\nOrganizations and name using Stanford NER"
@@ -120,23 +123,28 @@ class ResumeParser(object):
                 res['candidate_skills'] = candidate_skills
                 candidate_education = self.get_education(text)
                 res['candidate_education'] = candidate_education
-                candidate_company = self.get_company(text)
+                candidate_company = self.get_company(text.lower())
                 res['candidate_company'] = candidate_company
                 urls_list = self.getUrls(text.lower())
                 res['urls_list'] = urls_list
-                candidate_designation = self.get_designation(text)
+                candidate_designation = self.get_designation(text.lower())
                 res['candidate_designation'] = candidate_designation
+                # print filename
+                # print candidate_designation
                 certificate_list = self.get_certificate(text.lower())
                 res['certificate_list'] = certificate_list
                 print res
+                try:
+                    os.remove(filename)
+                except:
+                    pass
                 with open('result.csv', 'a') as csvfile:
                     fieldnames = res.keys()
                     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
                     # writer.writeheader()
                     writer.writerow(res)
-        
+                
 
 if __name__ == '__main__':
-    while True:
-        ResumeParser().fileReader()
+    ResumeParser().fileReader()
     
