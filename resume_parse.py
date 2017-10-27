@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import textract, pdb, re, csv, os
+import textract, pdb, re, csv, os, json
 from nltk.tag import StanfordNERTagger
 from nltk.tokenize import word_tokenize
 
@@ -102,9 +102,14 @@ class ResumeParser(object):
     
     def fileReader(self):
         res = {}
+        result_list = []
         #one can give path of any  target direcory here
         cwd = os.getcwd()
         count = 0
+        try:
+            os.remove(result.csv)
+        except:
+            pass
         for filename in os.listdir(cwd):
             if filename.endswith(".docx") or filename.endswith(".pdf"):
                 count += 1
@@ -134,16 +139,14 @@ class ResumeParser(object):
                 certificate_list = self.get_certificate(text.lower())
                 res['certificate_list'] = certificate_list
                 print res
-                try:
-                    os.remove(filename)
-                except:
-                    pass
+                result_list.append(res)
                 with open('result.csv', 'a') as csvfile:
                     fieldnames = res.keys()
                     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
                     # writer.writeheader()
                     writer.writerow(res)
-                
+        with open('result.json', 'w') as fp:
+            json.dump(result_list, fp)
 
 if __name__ == '__main__':
     ResumeParser().fileReader()
