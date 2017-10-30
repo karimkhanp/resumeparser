@@ -1,0 +1,30 @@
+We present an evaluation of the effectiveness of detecting events using a variety of features derived from Twitter posts, namely temporal, spatial, and textual content.
+
+We evaluate our framework on a large-scale, real-world dataset from Twitter.
+Furthermore, we apply our event detection system to a large corpus of tweets posted during the August
+2011 riots in England. We use ground-truth data based on intelligence gathered by the London Metropolitan
+Police Service, which provides a record of actual terrestrial events and incidents during the riots, and show
+that our system can perform as well as terrestrial sources, and even better in some cases.
+
+many existing approaches to event detection are limited to global or large-scale event detection (e.g., natural disasters and terror at-tacks), while detecting small-scale incidents such as fires, car accidents, and public
+order events remains an ongoing research topic due to several key challenges.
+
+Major challenges -
+One challenge is that online posts are often constrained in length (referred to as
+microblogs), which means that only a small amount of text is available to be analysed
+to gain insights. 
+Frequent use of informal, irregular, and abbreviated words; 
+A large number of spelling and grammat-ical errors;
+The use of improper sentence structure and mixed languages 
+Mixed language - Some languages are more challenging than others, for example, Arabic users use dialects heavily as well as a mixture of Latin and Arabic characters (Arabizi) 
+Different patterns of dialects in vocabulary, morphology, and spelling from the standard language ( here Arabic), and most do not have standard spellings. 
+Spammers - social networking services popularity have attracted spammers and other content polluters to spread advertisements, pornography, viruses, phishing, and other malicious material that cloud the information analysis
+
+Despite these challenges, it has been noted that detecting small-scale events is essential to improving situational awareness of both citizens and decision makers.
+
+This approach is based on the integration of supervised machine-learning algorithms to
+detect larger scale events and unsupervised approaches to cluster, disambiguate, and
+summarize smaller sub-events, with a goal of improving situational awareness in emer-
+gency situations through automatic methods.
+
+

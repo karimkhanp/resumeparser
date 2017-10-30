@@ -2,6 +2,8 @@
 import textract, pdb, re, csv, os, json
 from nltk.tag import StanfordNERTagger
 from nltk.tokenize import word_tokenize
+from datetime import date
+from work_experience import WorkExperience
 
 '''
     This code read CVs in docs and pdf format and extract various required fields
@@ -98,7 +100,7 @@ class ResumeParser(object):
     
     def getUrls(self, text):
         urls = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', text)
-        return urls 
+        return urls
     
     def fileReader(self):
         res = {}
@@ -112,39 +114,49 @@ class ResumeParser(object):
             pass
         for filename in os.listdir(cwd):
             if filename.endswith(".docx") or filename.endswith(".pdf"):
-                count += 1
-                print count
-                res['file_name'] = filename
-                text = textract.process(filename)
-                # print "\nOrganizations and name using Stanford NER"
-                # SF_name = self.StanfordNER(text.lower())
-                RB_name = self.name_extractor(text.lower())
-                res['RB_name'] = RB_name
-                mb_number = self.getPhone(text.lower())
-                res['mb_number'] = mb_number
-                email = self.getEmail(text.lower())
-                res['email'] = email
-                candidate_skills = self.get_skill(text.lower())
-                res['candidate_skills'] = candidate_skills
-                candidate_education = self.get_education(text)
-                res['candidate_education'] = candidate_education
-                candidate_company = self.get_company(text.lower())
-                res['candidate_company'] = candidate_company
-                urls_list = self.getUrls(text.lower())
-                res['urls_list'] = urls_list
-                candidate_designation = self.get_designation(text.lower())
-                res['candidate_designation'] = candidate_designation
-                # print filename
-                # print candidate_designation
-                certificate_list = self.get_certificate(text.lower())
-                res['certificate_list'] = certificate_list
-                print res
-                result_list.append(res)
-                with open('result.csv', 'a') as csvfile:
-                    fieldnames = res.keys()
-                    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-                    # writer.writeheader()
-                    writer.writerow(res)
+                try:
+                    print
+                    print "filename: ", filename
+                    count += 1
+                    print "count: ", count
+                    res['file_name'] = filename
+                    text = textract.process(filename)
+                    work_experience_obj = WorkExperience(text.lower())
+                    # print "\nOrganizations and name using Stanford NER"
+                    # SF_name = self.StanfordNER(text.lower())
+                    RB_name = self.name_extractor(text.lower())
+                    res['RB_name'] = RB_name
+                    mb_number = self.getPhone(text.lower())
+                    res['mb_number'] = mb_number
+                    email = self.getEmail(text.lower())
+                    res['email'] = email
+                    candidate_skills = self.get_skill(text.lower())
+                    res['candidate_skills'] = candidate_skills
+                    candidate_education = self.get_education(text)
+                    res['candidate_education'] = candidate_education
+                    candidate_company = self.get_company(text.lower())
+                    res['candidate_company'] = candidate_company
+                    urls_list = self.getUrls(text.lower())
+                    res['urls_list'] = urls_list
+                    candidate_designation = self.get_designation(text.lower())
+                    res['candidate_designation'] = candidate_designation
+                    # print filename
+                    # print candidate_designation
+                    certificate_list = self.get_certificate(text.lower())
+                    res['certificate_list'] = certificate_list
+                    # Work Experience
+                    res['work_experience'] = work_experience_obj.get_work()
+                    print "\nWork Experience: ", res['work_experience'] , "\n"
+                    result_list.append(res)
+                    print result_list
+                    with open('result.csv', 'a') as csvfile:
+                        fieldnames = res.keys()
+                        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+                        # writer.writeheader()
+                        writer.writerow(res)
+                except Exception:
+                    print "---**---Error in File Name: ", filename
+                    raw_input("Press any key to continue....")
         with open('result.json', 'w') as fp:
             json.dump(result_list, fp)
 

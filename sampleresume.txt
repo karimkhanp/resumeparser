@@ -1,0 +1,105 @@
+  				Curriculum Vitae
+Abhijit Rajput
+Email id: abhijit_2789@yahoo.in
+Mobile: +91 9096155966
+
+Career Objective
+I want to utilize my skills and potential to achieve the challenging position in the Software Industry and fulfilling organizational goals.
+
+Professional Summary
+2.6 years of experience in PHP and Wordpress development.
+Good knowledge and experience in PHP, Wordpress, OOP, JavaScript, jQuery, AJAX, MySQL etc.
+Excellent code reviews and code debugging skills.
+Good Knowledge in writing SQL queries.
+Ability to work as a team member or as an individual and confident in serving the best results
+Possess good verbal and written communication skills.
+
+Technical Skills
+Languages: PHP.
+Web Technologies: HTML, CSS, JavaScript, jQuery, AJAX.
+Content Management Systems: Wordpress 
+Framework: Laravel (Beginner)
+Database: MySQL
+Web Server: Apache
+IDE Tools: Notepad++, Sublime Text, Net Beans, Atom
+Operating Systems: Windows, Linux
+Desktop FTP Client: Filezilla, WinSCP
+CRM: Salesforce (Basic)
+
+
+
+
+Employers
+Currently working as a Jr PHP Developer in Annet Technologies, Mumbai from Jan, 2015.
+Engaged in developing web based applications using PHP and Wordpress.
+
+Projects Description
+Project – I
+Project Name: Finance House  Securities (Wordpress)
+Languages: PHP, Javascript
+CMS: Wordpress
+Backend: MYSQL
+
+Description:
+This is CMS based  Website developed for Finance House Group.
+FHS offers customized and user-friendly online trading services that easily enable clients to monitor share prices as well as their own portfolios.
+Website : http://www.fhs.ae
+Responsibilities:
+Coding and Plugin Developement.
+
+Project – II
+Project Name: Myreta Blog (Wordpress)
+Languages: PHP, Javascript
+CMS: Wordpress
+Backend: MYSQL
+
+Description:
+This is Real Estate Website developed in ASP.Net.
+For posting the blogs of site, we have integrated the wordpress with these site.
+Website : http://www.myreta.com/news/
+Responsibilities:
+Coding and Theme Development.
+
+     
+    
+Project - III
+Project Name: MyGNP (Salesforce)
+Languages: Javascript, HTML, CSS  
+CRM: Salesforce
+
+Description:
+MyGNP (Good Neighbour Pharmacy ) is hosted on Salesforce CRM.
+Good Neighbour Pharmacy Offers quality products, competitive pricing to the chain stores and Personalized customer service.
+Responsibilities:
+Front-End Development and Designing.
+ http://www.mygnp.com/
+
+Project - IV
+Project Name: Cathedral School (Wordpress)
+Languages: PHP, Javascript.
+CMS: Wordpress
+Backend: MYSQL
+
+Description:
+It is a School website for Cathedral and John Canon School.
+They have All School Information on this site and also an administrator can change all the pages and its content periodically.
+Responsibilities:
+Theme and Plugin Development.
+http://cathedral-school.com/
+
+Personal Qualities
+Good in managing things.
+Positive attitude
+Team Player
+Eager to learn new technologies
+.
+
+
+Academia
+M.Sc (Computer Science) from University Of Pune, in 2011-2013.
+B.Sc (Computer Science)  from North MaharashtraUniversity, Jalgaon in 2008-2011.
+
+Personal Details
+Dare Of Birth: July 27, 1989
+Languages: English, Hindi, Marathi.
+Address: 720, Chintamani Co. Society, Sambhaji Nagar, Andheri (East)   Mumbai – 400069
