@@ -102,6 +102,24 @@ class ResumeParser(object):
         urls = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', text)
         return urls
     
+    def get_passingyear(self, text, education):
+        text_lines = text.splitlines()
+        passing_year = []
+        for line in text_lines:
+            for degree in education:
+                if degree.lower() in line:
+                    year = re.findall('\b(19|20)\d{2}\b', text)
+                    p_year = {}
+                    if len(year) > 1:
+                        year = '-'.join(year)
+                        p_year[degree]= year
+                        passing_year.append(p_year)
+                        break
+                    else:
+                        p_year[degree]= year
+                        passing_year.append(p_year)
+                        break
+        return passing_year
     def fileReader(self):
         res = {}
         result_list = []
@@ -113,7 +131,7 @@ class ResumeParser(object):
         except:
             pass
         for filename in os.listdir(cwd):
-            if filename.endswith(".docx") or filename.endswith(".pdf"):
+            if filename.endswith(".docx") or filename.endswith(".pdf") or filename.endswith(".doc"):
                 try:
                     print
                     print "filename: ", filename
@@ -140,23 +158,22 @@ class ResumeParser(object):
                     res['urls_list'] = urls_list
                     candidate_designation = self.get_designation(text.lower())
                     res['candidate_designation'] = candidate_designation
-                    # print filename
-                    # print candidate_designation
                     certificate_list = self.get_certificate(text.lower())
                     res['certificate_list'] = certificate_list
-                    # Work Experience
-                    res['work_experience'] = work_experience_obj.get_work()
-                    print "\nWork Experience: ", res['work_experience'] , "\n"
+                    passing_year = self.get_passingyear(text.lower(), candidate_education)
+                    res['passing_year'] = passing_year
+                    print res['passing_year']
+                    res['work_experience'] = work_experience_obj.get_work()    
                     result_list.append(res)
-                    print result_list
                     with open('result.csv', 'a') as csvfile:
                         fieldnames = res.keys()
                         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
                         # writer.writeheader()
                         writer.writerow(res)
                 except Exception:
-                    print "---**---Error in File Name: ", filename
-                    raw_input("Press any key to continue....")
+                    # print "---**---Error in File Name: ", filename
+                    # raw_input("Press any key to continue....")
+                    continue
         with open('result.json', 'w') as fp:
             json.dump(result_list, fp)
 
