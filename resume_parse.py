@@ -107,6 +107,7 @@ class ResumeParser(object):
         passing_year = []
         for line in text_lines:
             for degree in education:
+                # pdb.set_trace()
                 if degree.lower() in line:
                     year = re.findall('\b(19|20)\d{2}\b', text)
                     p_year = {}
@@ -115,7 +116,7 @@ class ResumeParser(object):
                         p_year[degree]= year
                         passing_year.append(p_year)
                         break
-                    else:
+                    elif len(year) == 1:
                         p_year[degree]= year
                         passing_year.append(p_year)
                         break
