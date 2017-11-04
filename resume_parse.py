@@ -103,13 +103,14 @@ class ResumeParser(object):
         return urls
     
     def get_passingyear(self, text, education):
+        # pdb.set_trace()
         text_lines = text.splitlines()
         passing_year = []
         for line in text_lines:
             for degree in education:
                 # pdb.set_trace()
-                if degree.lower() in line:
-                    year = re.findall('\b(19|20)\d{2}\b', text)
+                if degree.lower().strip() in line:
+                    year = re.findall('((?:19|20)\d\d)', line)
                     p_year = {}
                     if len(year) > 1:
                         year = '-'.join(year)
